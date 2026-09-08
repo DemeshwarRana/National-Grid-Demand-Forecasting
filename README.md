@@ -41,14 +41,14 @@ A meaningful part of this project was validating the data itself before trusting
 
 | Model | Validation Loss |
 |---|---|
-| SimpleRNN | 0.1346 |
-| LSTM | 0.0940 |
-| **GRU (selected)** | **0.0831** |
+| SimpleRNN | 0.0981 |
+| LSTM | 0.0952 |
+| **GRU (selected)** | **0.0793** |
 
 **Final model (GRU) on the test set:**
-- **R² = 0.839** (vs. naive persistence baseline of **0.790**)
-- **MAE = 1,849.7 MW** (~7% of typical demand)
-- **RMSE = 2,438.4 MW**
+- **R² = 0.814** (vs. naive persistence baseline of **0.790**)
+- **MAE = 2,039.6 MW** (~8% of typical demand)
+- **RMSE = 2,624.8 MW**
 
 The gap between RMSE and MAE indicates the model's largest errors are concentrated on a subset of days, visually confirmed to be the coldest, highest-demand periods in the test window, the model tracks typical daily demand well but underestimates the sharpest peaks.
 
