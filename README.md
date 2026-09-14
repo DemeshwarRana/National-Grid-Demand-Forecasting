@@ -84,7 +84,7 @@ Python, TensorFlow/Keras, scikit-learn, pandas, NumPy, Plotly
 ## Repository Structure
 
 ```
-├── National_Grid_Demand_Forecasting.ipynb   # Full pipeline: data validation, modeling, evaluation
+├── National_Grid_Demand_Forecasting_.ipynb  # Full pipeline: data validation, modeling, evaluation
 ├── data/                                     # Raw dataset (National Grid ESO, via Kaggle)
 ├── requirements.txt
 └── README.md
@@ -94,7 +94,7 @@ Python, TensorFlow/Keras, scikit-learn, pandas, NumPy, Plotly
 
 ```bash
 pip install -r requirements.txt
-jupyter notebook National_Grid_Demand_Forecasting.ipynb
+jupyter notebook National_Grid_Demand_Forecasting_.ipynb
 ```
 
 Run cells in order from top to bottom. The dataset is expected at `data/National Grid Data 2009-2025.csv`.
