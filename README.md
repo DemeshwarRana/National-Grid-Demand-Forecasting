@@ -20,7 +20,7 @@ This problem has gotten harder over the past decade. Wind and solar generation a
 
 A meaningful part of this project was validating the data itself before trusting any model result:
 
-- **Missing values & duplicate timestamps:** checked and handled (interconnector columns with 62-93% missingness were dropped rather than imputed; 32 duplicate timestamps removed).
+- **Missing values & duplicate timestamps:** checked and handled (interconnector columns with 62-93% missingness were dropped rather than imputed). An initial check found 32 duplicate timestamps; tracing the root cause showed these came from the UK's October "fall-back" daylight saving day (which has 50 half-hourly settlement periods instead of 48) rolling over into the next calendar day. Dropping periods 49/50 fixed the underlying issue, confirmed by re-checking the index (0 duplicates remaining).
 - **Timestamp continuity:** checked the time index itself for gaps, not just missing values in existing rows. Found 6 missing timestamps, all falling exactly on the UK's daylight saving "clocks forward" dates, an expected characteristic of the settlement period system (that day only has 46 half-hour periods instead of 48), not a data error.
 - **A real data quality issue, caught and fixed:** a year-by-year comparison showed 2025's mean demand was ~25% higher than every other year. Investigating further showed the 2025 data only contained January and two days of February, an incomplete, winter-only partial year that was skewing comparisons and sitting inside the original test split. The incomplete tail was dropped and the pipeline rerun to confirm the fix didn't change results for the worse.
 - **Outlier check:** no extreme outliers found in the demand column (|z| > 4).
@@ -41,14 +41,16 @@ A meaningful part of this project was validating the data itself before trusting
 
 | Model | Validation Loss |
 |---|---|
-| SimpleRNN | 0.0981 |
-| LSTM | 0.0952 |
-| **GRU (selected)** | **0.0793** |
+| SimpleRNN | 0.089 |
+| LSTM | 0.089 |
+| **GRU (selected)** | **0.082** |
+
+After selecting GRU, further tuning (an additional GRU layer, learning rate) brought validation loss down to 0.080 for the final model.
 
 **Final model (GRU) on the test set:**
-- **R² = 0.814** (vs. naive persistence baseline of **0.790**)
-- **MAE = 2,039.6 MW** (~8% of typical demand)
-- **RMSE = 2,624.8 MW**
+- **R² = 0.869** (vs. naive persistence baseline of **0.790**)
+- **MAE = 1,708.0 MW** (~7% of typical demand)
+- **RMSE = 2,200.2 MW**
 
 The gap between RMSE and MAE indicates the model's largest errors are concentrated on a subset of days, visually confirmed to be the coldest, highest-demand periods in the test window, the model tracks typical daily demand well but underestimates the sharpest peaks.
 
